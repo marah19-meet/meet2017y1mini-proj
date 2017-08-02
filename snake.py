@@ -1,39 +1,34 @@
 import turtle
-import random #We'll need this later in the lab
-turtle.tracer(1,0)#This helps the turtle move more smoothly
+import random 
+turtle.tracer(1,0)
+
+turtle.register_shape("trash.gif") 
+food = turtle.clone()
+food.shape("trash.gif")
+food.penup()
+
 SIZE_X=800
 SIZE_Y=500
-turtle.setup(SIZE_X, SIZE_Y) #Curious? It's the turtle window #size.
+turtle.setup(SIZE_X, SIZE_Y) 
 turtle.penup()
 SQUARE_SIZE = 20
 START_LENGTH =8
-#Initialize lists
+
 pos_list = []
 stamp_list = []
 food_pos = []
 food_stamps = []
-#Set up positions (x,y) of boxes that make up the snake
 snake = turtle.clone()
 snake.shape("square")
-#Hide the turtle object (it's an arrow - we don't need to see it)
 turtle.hideturtle()
 
-#Draw a snake at the start of the game with a for loop
-#for loop should use range() and count up to the number of pieces
-#in the snake (i.e. START_LENGTH)
+
 for i in range(START_LENGTH) :
-    x_pos=snake.pos()[0] #Get x-position with snake.pos()[0]
+    x_pos=snake.pos()[0] 
     y_pos=snake.pos()[1]
-    #Add SQUARE_SIZE to x_pos. Where does x_pos point to now?
-    # You're RIGHT!
-    x_pos=x_pos+SQUARE_SIZE#x+=1 its is also right
-    my_pos=(x_pos,y_pos)#Store position variables in a tuple
-    snake.goto(x_pos,y_pos)#Move snake to new(x,y)
-    #Append the new position tuple to pos_list
+    my_pos=(x_pos,y_pos)
+    snake.goto(x_pos,y_pos)
     pos_list.append(my_pos)
-    #Save the stamp ID! You'll need to erase it later. Then
-    # append
-    # it to stamp_list.
     stamps = snake.stamp()
     stamp_list.append(stamps)
 
@@ -41,8 +36,7 @@ UP_ARROW = "Up"
 LEFT_ARROW = "Left"  
 DOWN_ARROW = "Down" 
 RIGHT_ARROW = "Right" 
-TIME_STEP = 100#Update snake position after this many
-#milliseconds
+TIME_STEP = 100
 SPACEBAR = "space"
 UP = 0
 LEFT=1
@@ -57,7 +51,7 @@ LEFT_EDGE=-400
 def up():
     global direction 
     direction=UP 
-    move_snake()#Update the snake drawing <- remember me later
+    move_snake()
     print("You pressed the up key!")
 
 def down():
@@ -78,6 +72,25 @@ turtle.onkeypress(down,DOWN_ARROW)
 turtle.onkeypress(right,RIGHT_ARROW)
 turtle.onkeypress(left,LEFT_ARROW)
 turtle.listen()
+
+
+
+def make_food():
+    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
+    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
+    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
+    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
+    food_x = random.randint(min_x,max_x)*SQUARE_SIZE
+    food_y = random.randint(min_y,max_y)*SQUARE_SIZE
+    
+   
+    food.goto(food_x,food_y)
+    food_pos.append(food.pos())
+    stamp = food.stamp()
+    food_stamps.append(stamp)
+
+
+
 
 def move_snake():
     global direction
@@ -105,7 +118,21 @@ def move_snake():
     #piece of the tail
     old_stamp = stamp_list.pop(0)
     snake.clearstamp(old_stamp)
-    pos_list.pop(0)
+    
+    
+    global food_stamps, food_pos
+    if snake.pos() in food_pos:
+        food_ind=food_pos.index(snake.pos())
+        food.clearstamp(food_stamps[food_ind]) 
+
+        food_pos.pop(food_ind)
+        food_stamps.pop(food_ind)
+        print("You have eaten the food!")
+        pos_list.pop(0)
+        make_food()
+        #HINT: This if statement may be useful for Part 8 
+
+        
 
     new_pos=snake.pos()
     new_x_pos=new_pos[0]
@@ -122,20 +149,21 @@ def move_snake():
     elif new_y_pos<=DOWN_EDGE:
         print("you print the down edge,game over!")
         quit()
+
+        
     turtle.ontimer(move_snake,TIME_STEP)
 move_snake()
+make_food()
 
 
-turtle.register_shape("trash.gif") 
-food = turtle.clone()
-food.shape("trash.gif")
-food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
-food_stamps = []
-for this_food_pos in food_pos:
-    x_pos= this_food_pos[0]
-    y_pos= this_food_pos[1]
-    turtle.goto(x_pos,y_pos)
-    stamp.id=food.stamp
-    food_stamps.append(stamp.id)
+##food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
+##food_stamps = []
+##for this_food_pos in food_pos:
+##    x_pos= this_food_pos[0]
+##    y_pos= this_food_pos[1]
+##    food.goto(x_pos,y_pos)
+##    stamp_id=food.stamp()
+##    food_stamps.append(stamp_id)
+##food.hideturtle()
 
 
