@@ -1,11 +1,12 @@
 import turtle
-import random 
+import random
+turtle.fillcolor("red")
 turtle.tracer(1,0)
-
 turtle.register_shape("trash.gif") 
 food = turtle.clone()
 food.shape("trash.gif")
 food.penup()
+
 
 SIZE_X=800
 SIZE_Y=500
@@ -154,6 +155,7 @@ def move_snake():
     turtle.ontimer(move_snake,TIME_STEP)
 move_snake()
 make_food()
+
 
 
 ##food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
