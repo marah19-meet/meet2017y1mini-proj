@@ -1,14 +1,16 @@
 import turtle
 import random
-turtle.fillcolor("yellow")
+turtle.fillcolor("purple")
 wn=turtle.Screen()
-wn.bgcolor("black")
+wn.bgcolor("pink")
 
 
 turtle.tracer(1,0)
-turtle.register_shape("trash.gif") 
+turtle.register_shape("gi.gif")
+
 food = turtle.clone()
-food.shape("trash.gif")
+food.shape("gi.gif")
+
 food.penup()
 
 
@@ -56,9 +58,7 @@ LEFT_EDGE=-400
 def up():
     global direction 
     direction=UP 
-    move_snake()
     print("You pressed the up key!")
-
 def down():
     global direction
     direction=DOWN
@@ -121,9 +121,7 @@ def move_snake():
     ######## SPECIAL PLACE - Remember it for Part 5
     #pop zeroth element in pos_list to get rid of last the last
     #piece of the tail
-    old_stamp = stamp_list.pop(0)
-    pos_list.pop(0)
-    snake.clearstamp(old_stamp)
+    
     
     
     global food_stamps, food_pos
@@ -134,14 +132,15 @@ def move_snake():
         food_pos.pop(food_ind)
         food_stamps.pop(food_ind)
         print("You have eaten the food!")
-        pos_list.pop(0)
         make_food()
-        new_stamp=turtle.stamp()
-        food_stamps.append(new_stamp)
+    else:
+        old_stamp = stamp_list.pop(0)
+        pos_list.pop(0)
+        snake.clearstamp(old_stamp)
         
         #HINT: This if statement may be useful for Part 8 
-
-        
+   
+    
 
     new_pos=snake.pos()
     new_x_pos=new_pos[0]
