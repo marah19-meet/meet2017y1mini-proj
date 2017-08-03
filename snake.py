@@ -1,6 +1,10 @@
 import turtle
 import random
-turtle.fillcolor("red")
+turtle.fillcolor("yellow")
+wn=turtle.Screen()
+wn.bgcolor("black")
+
+
 turtle.tracer(1,0)
 turtle.register_shape("trash.gif") 
 food = turtle.clone()
@@ -20,7 +24,7 @@ stamp_list = []
 food_pos = []
 food_stamps = []
 snake = turtle.clone()
-snake.shape("square")
+snake.shape("circle")
 turtle.hideturtle()
 
 
@@ -37,7 +41,7 @@ UP_ARROW = "Up"
 LEFT_ARROW = "Left"  
 DOWN_ARROW = "Down" 
 RIGHT_ARROW = "Right" 
-TIME_STEP = 100
+TIME_STEP = 150
 SPACEBAR = "space"
 UP = 0
 LEFT=1
@@ -79,8 +83,8 @@ turtle.listen()
 def make_food():
     min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
     max_x=int(SIZE_X/2/SQUARE_SIZE)-1
-    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
-    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
+    min_y=-int(SIZE_Y/2/SQUARE_SIZE)+1
+    max_y=int(SIZE_Y/2/SQUARE_SIZE)-1
     food_x = random.randint(min_x,max_x)*SQUARE_SIZE
     food_y = random.randint(min_y,max_y)*SQUARE_SIZE
     
@@ -118,6 +122,7 @@ def move_snake():
     #pop zeroth element in pos_list to get rid of last the last
     #piece of the tail
     old_stamp = stamp_list.pop(0)
+    pos_list.pop(0)
     snake.clearstamp(old_stamp)
     
     
@@ -131,6 +136,9 @@ def move_snake():
         print("You have eaten the food!")
         pos_list.pop(0)
         make_food()
+        new_stamp=turtle.stamp()
+        food_stamps.append(new_stamp)
+        
         #HINT: This if statement may be useful for Part 8 
 
         
@@ -150,11 +158,20 @@ def move_snake():
     elif new_y_pos<=DOWN_EDGE:
         print("you print the down edge,game over!")
         quit()
+    if pos_list[-1] in pos_list[:-1]:
+        print("you ate yourself")
+        quit()
+        
+        
+        
+
 
         
     turtle.ontimer(move_snake,TIME_STEP)
 move_snake()
 make_food()
+
+turtle.mainloop()
 
 
 
@@ -166,6 +183,6 @@ make_food()
 ##    food.goto(x_pos,y_pos)
 ##    stamp_id=food.stamp()
 ##    food_stamps.append(stamp_id)
-##food.hideturtle()
+food.hideturtle()
 
 
